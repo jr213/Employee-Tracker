@@ -3,14 +3,9 @@ CREATE DATABASE employee_db;
 
 USE employee_db;
 
-CREATE TABLE employee (
+CREATE TABLE department (
     id INT NOT NULL PRIMARY KEY,
-    f_name VARCHAR(20),
-    l_name VARCHAR(25),
-    role_id INT NOT NULL,
-    manager_id INT REFERENCES employee.id,
-    FOREIGN KEY (role_id)
-    REFERENCES roles(id)
+    department_name VARCHAR(25)
 );
 
 CREATE TABLE role (
@@ -22,7 +17,16 @@ CREATE TABLE role (
     REFERENCES department(id)
 );
 
-CREATE TABLE department (
+CREATE TABLE employee (
     id INT NOT NULL PRIMARY KEY,
-    department_name VARCHAR(25)
-)
+    f_name VARCHAR(20),
+    l_name VARCHAR(25),
+    role_id INT NOT NULL,
+    manager_id INT REFERENCES employee.id,
+    FOREIGN KEY (role_id)
+    REFERENCES roles(id)
+);
+
+
+
+
