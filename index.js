@@ -1,5 +1,3 @@
-
-
 const inquirer = require('inquirer');
 const db = require('connection.js');
 
@@ -9,7 +7,7 @@ db.connect((error) => {
     startSyst();
 })
 
-const firstQuestion = [
+const initialQuestion = [
     {
         type: 'list',
         name: 'whatToDo',
@@ -27,16 +25,16 @@ const firstQuestion = [
     }
 ]
 
-let whatDepartment = [
+const whatDepartment = [
     {
         name: 'deptName',
         message: 'Give the department you would like to add a name.'
     }
 ]
 
-let whatRole = [
+const whatRole = [
     {
-        name: 'roleTitle',
+        name: 'roconstitle',
         message: 'Give the new role a title.'
     },
     {
@@ -52,7 +50,7 @@ let whatRole = [
     }
 ]
 
-let whatEmployee = [
+const whatEmployee = [
     {
         name: 'fName',
         message: 'What is the first name of the employee?'
@@ -75,7 +73,7 @@ let whatEmployee = [
     }
 ]
 
-let updateEmployeeQuestion = [
+const updateEmployeeQuestion = [
     {
         type: 'list',
         name: 'employeeName',
@@ -93,7 +91,7 @@ let updateEmployeeQuestion = [
 
 
 function startSyst () {
-    inquirer.prompt(firstQuestion).then((answers) => {
+    inquirer.prompt(initialQuestion).then((answers) => {
         switch (answers.whatToDo) {
             case 'View All Employees':
                 getEmployees();
@@ -125,28 +123,28 @@ function startSyst () {
     })
 };
 
-let getEmployees = () => {
+const getEmployees = () => {
     db.query('SELECT * FROM employee;', (err, data) => {
         console.table(data);
         startSyst();
     })
 };
 
-let getRoles = () => {
+const getRoles = () => {
     db.query('SELECT * FROM role;', (err, data) => {
         console.table(data);
         startSyst();
     })
 };
 
-let getDepartments = () => {
+const getDepartments = () => {
     db.query('SELECT * FROM department;', (err, data) => {
         console.table(data);
         startSyst();
     })
 };
 
-let addDepartment = () => {
+const addDepartment = () => {
     inquirer.prompt(whatDepartment)
     .then((response) => {
         db.query(`INSERT INTO department (name) VALUES (?);`, [response.deptName], (err, data) => {
@@ -156,13 +154,13 @@ let addDepartment = () => {
     })
 };
 
-let addRole = () => {
+const addRole = () => {
     db.query('SELECT * FROM department;', (err, data) => {
         whatRole[2].choices = data.map((element) => ({value: element.id, name: element.name}));
         inquirer.prompt(whatRole)
         .then((response) => {
             db.query(`INSERT INTO role (title, salary, department_id) VALUES (?,?,?);`, 
-            [response.roleTitle, response.salary, response.whichDept], 
+            [response.roconstitle, response.salary, response.whichDept], 
             (err, data) => {
                 console.log('New role has been successfully added!')
                 startSyst();
@@ -171,7 +169,7 @@ let addRole = () => {
     })
 };
 
-let addEmployee = () => {
+const addEmployee = () => {
     db.query('SELECT * FROM role;', (err, data) => {
         whatEmployee[2].choices = data.map((element) => ({value: element.id, name: element.title}))
         db.query('SELECT * FROM employee;', (err, data) => {
@@ -191,7 +189,7 @@ let addEmployee = () => {
     })
 };
 
-let updateEmployeeRole = () => {
+const updateEmployeeRole = () => {
     db.query('SELECT * FROM employee;', (err, data) => {
         updateEmployeeQuestion[0].choices = data.map((element) => ({value: element.id, name: element.first_name+' '+element.last_name}));
         db.query('SELECT * FROM role;', (err, data) => {
